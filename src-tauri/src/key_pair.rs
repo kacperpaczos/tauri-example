@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{Read, Write};
-#[cfg(target_os = "unix")]
+#[cfg(any(target_os = "linux", target_os = "macos", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd", target_os = "dragonfly"))]
 use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
 
@@ -30,7 +30,7 @@ pub fn generate_or_load_key_pair(app_data_dir: &PathBuf) -> Result<KeyPair> {
 ///
 /// This method automatically creates the required directories on that path and fixes the
 /// permissions of the file (0600, read and write permissions only for the owner).
-#[cfg(target_os = "unix")]
+#[cfg(any(target_os = "linux", target_os = "macos", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd", target_os = "dragonfly"))]
 pub fn save_key_pair_to_file(key_pair: &KeyPair, path: PathBuf) -> Result<()> {
     let private_key_hex = hex::encode(key_pair.private_key().as_bytes());
 
@@ -46,7 +46,7 @@ pub fn save_key_pair_to_file(key_pair: &KeyPair, path: PathBuf) -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(target_os = "unix"))]
+#[cfg(not(any(target_os = "linux", target_os = "macos", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd", target_os = "dragonfly")))]
 pub fn save_key_pair_to_file(key_pair: &KeyPair, path: PathBuf) -> Result<()> {
     let private_key_hex = hex::encode(key_pair.private_key().as_bytes());
 

@@ -49,7 +49,7 @@ fn setup_handler(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error +
     app.manage(HttpPort(config.http_port));
 
     // Manually construct the app WebView window as we want to set a custom data directory.
-    tauri::WindowBuilder::new(&app, "main", tauri::WindowUrl::App("index.html".into()))
+    tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("index.html".into()))
         .data_directory(app_data_dir)
         .resizable(false)
         .fullscreen(false)

@@ -3,14 +3,14 @@
 use std::{fs, path::PathBuf};
 
 use aquadoggo::LockFile;
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager, path::BaseDirectory};
 
 use crate::consts::{RESOURCES_DIR, SCHEMA_LOCK_FILE};
 
 pub fn load_schema_lock(app: &AppHandle) -> anyhow::Result<LockFile> {
     let schema_lock_path = app
-        .path_resolver()
-        .resolve_resource(PathBuf::new().join(RESOURCES_DIR).join(SCHEMA_LOCK_FILE))
+        .path()
+        .resolve(PathBuf::new().join(RESOURCES_DIR).join(SCHEMA_LOCK_FILE), BaseDirectory::Resource)
         .expect("failed to resolve resource");
     let data = fs::read_to_string(schema_lock_path)?;
     let lock_file = toml::from_str(&data)?;

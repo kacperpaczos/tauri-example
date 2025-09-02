@@ -8,7 +8,7 @@ use anyhow::Result;
 use aquadoggo::{ConfigFile, Configuration};
 use figment::providers::{Env, Serialized};
 use figment::Figment;
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager, path::BaseDirectory};
 use tempdir::TempDir;
 
 use crate::consts::{AQUADOGGO_CONFIG, BLOBS_DIR, RESOURCES_DIR};
@@ -31,7 +31,7 @@ pub fn app_data_dir(app: &AppHandle) -> Result<PathBuf, anyhow::Error> {
             .to_path_buf()
     } else {
         let path = app
-            .path_resolver()
+            .path()
             .app_data_dir()
             .expect("recommended app data dir is detected");
 
@@ -51,8 +51,8 @@ pub fn app_data_dir(app: &AppHandle) -> Result<PathBuf, anyhow::Error> {
 pub fn load_config(app: &AppHandle, app_data_dir: &PathBuf) -> Result<Configuration> {
     // Get the default config path.
     let default_config_path = app
-        .path_resolver()
-        .resolve_resource(PathBuf::new().join(RESOURCES_DIR).join(AQUADOGGO_CONFIG))
+        .path()
+        .resolve(PathBuf::new().join(RESOURCES_DIR).join(AQUADOGGO_CONFIG), BaseDirectory::Resource)
         .expect("failed to resolve resource");
 
     // Check if the expected config file exists. If not, this is the first time
