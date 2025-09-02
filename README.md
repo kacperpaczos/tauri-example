@@ -18,12 +18,12 @@ endpoint for requesting blobs.
 ## Requirements
 
 - Rust
-- NodeJS
+- Node.js >= 16
 
 ## Usage
 
 ```bash
-# Install NodeJS dependencies
+# Install dependencies
 npm install
 
 # Start Tauri development window
